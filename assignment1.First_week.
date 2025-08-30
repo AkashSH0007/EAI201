@@ -1,0 +1,44 @@
+Title: -
+Bot Brain: Your Personal Campus Guide.
+
+Abstract: -
+This project presents Bot Brain, an Intelligent campus navigation assistant for Chanakya university. The system contains search algorithms (BFS, DFS, UFS, A*) for assisting students and visitors and newcomers in path discovery, minimizing travel time. Using by modeling the campus as a weighted graph based on actual building locations and distances, the agent can answer navigation questions, offer route suggestions, and provide building information on Question.
+
+introduction: -
+Navigating a large university campus can be confusing for new students, visitors-especially during busy times and event times. To solve this problem, Bot Brain is a software assistant designed to help users find their way in Chanakya university. This project shows how computer science concepts like data structures, graph theory, search algorithms can be applied to real world challenges.
+
+Problem Statement: -
+Navigating a large university campus with more buildings and service areas often causes inconvenience and wastes time for new students and visitors. Without intelligent directional guidance, students may struggle to find the shortest route.so there is a need for an agent-based system that can help to wayfinding requests, suggest best routes, and provide relevant location details.
+
+Objectives: -
+Model the Chanakya university campus as weighted graph, it includes all major buildings and paths.
+Implement key search algorithms (BFS, DFS, UCS, A*) for route finding between any two locations.
+Enable simple query processing for path requests and information processing on buildings and services.
+
+SCOPE: -
+Campus modeling uses 12 locations.
+Search algorithms implementation for path finding.
+Text based command line user interface.
+
+REQUIREMENTS: -
+1)FUNCTIONAL REQUIREMENTS: -
+Campus modeling, Search Algorithms, User Interface, Query Processing.
+
+2)NON-FUNCTIONAL REQUIREMENTS: -
+Documentation, Report Submission in GITHUB Repo.
+
+3)DATA REQUIREMENTS: -
+Building Information, Campus Layout.
+
+Literature:-
+Recent Research on campus navigation and chatbot systems highlights efficiently pathfinding, User friendly interfaces, and real world mapping as keys for improving student navigation experiences.
+
+Tool/technology list.
+Programming language= Python (data structures, core libraries (collections, heapq, math)).
+Interface=text-based command line interface.
+Graph modeling=Adjacency List Data Structure.
+Google Maps API= University Satellite View.
+GitHub=Project Submission
+
+
+
