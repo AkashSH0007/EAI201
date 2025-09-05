@@ -35,7 +35,7 @@ Recent Research on campus navigation and chatbot systems highlights efficiently 
 
 Tool/technology list.
 Programming language= Python (data structures, core libraries (collections, heapq, math)).
-Interface=text-based command line interface.
+User Interface=Using Tkinter
 Graph modeling=Adjacency List Data Structure.
 Google Maps API= University Satellite View.
 GitHub=Project Submission.
