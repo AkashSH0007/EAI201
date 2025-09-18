@@ -1,0 +1,14 @@
+Normalization:
+Normalization is a technique often applied as part preparation for machine learning. the goal normalization is to change the values of numerical columns in the dataset to use a common scale, without distorting differences in the range of values or losing information.
+
+MinMAx Scaling = Xi'=Xi-Xmin/Xmax-Xmin 
+it is used in Algorithms sensitive to magnitude (Ex: Neural Nets, Gradient Descent).
+
+Mean Normalization = Xi'=Xi-Xmean/Xmax-Xmin 
+it is used in centered data. 
+
+MAX Absolute = Xi'=Xi/|Xmax| 
+it is useful in sparse data.
+
+Robust Scaling = Xi'=Xi-Xmedian/IQR{75th per-25th per}
+it is useful in Robust to Outlier in data.
