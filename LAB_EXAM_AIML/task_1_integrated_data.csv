@@ -1,0 +1,102 @@
+animal_name,hair,feathers,eggs,milk,airborne,aquatic,predator,toothed,backbone,breathes,venomous,fins,legs,tail,domestic,catsize,class_type,Class_Type,diet,conservation_status,habitat_type,ecosystem_type,predator_score
+aardvark,1,0,0,1,0,0,1,1,1,1,0,0,4,0,0,1,1,Mammal,insectivore,least concern,savanna,0,1
+antelope,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1,Mammal,herbivore,near threatened,grasslands,0,1
+bass,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,4,Fish,carnivore,least,freshwater,1,3
+bear,1,0,0,1,0,0,1,1,1,1,0,0,4,0,0,1,1,Mammal,omnivore,vulnerable,forest,0,2
+boar,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,omnivore,least concern,forest,0,2
+buffalo,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1,Mammal,herbivore,endangered,grasslands,0,1
+calf,1,0,0,1,0,0,0,1,1,1,0,0,4,1,1,1,1,Mammal,herbivore,endangered,domestic,0,1
+carp,0,0,1,0,0,1,0,1,1,0,0,1,0,1,1,0,4,Fish,omnivore,least concern,freshwater,1,2
+catfish,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,4,Fish,carnivore,least concern,freshwater,1,3
+cavy,1,0,0,1,0,0,0,1,1,1,0,0,4,0,1,0,1,Mammal,carnivore,least concern,freshwater,1,3
+cheetah,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,carnivore,least concern,freshwater,1,3
+chicken,0,1,1,0,1,0,0,0,1,1,0,0,2,1,1,0,2,Bird,carnivore,least concern,freshwater,1,3
+chub,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,4,Fish,carnivore,least concern,freshwater,1,3
+clam,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,7,Invertebrate,filter_feeder,least concern,marine,2,1
+crab,0,0,1,0,0,1,1,0,0,0,0,0,4,0,0,0,7,Invertebrate,omnivore,least concern,marine/coastal,3,2
+crayfish,0,0,1,0,0,1,1,0,0,0,0,0,6,0,0,0,7,Invertebrate,omnivore,least concern,marine/coastal,3,2
+crow,0,1,1,0,1,0,1,0,1,1,0,0,2,1,0,0,2,Bird,omnivore,least concern,marine/coastal,0,2
+deer,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+dogfish,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,1,4,Fish,Herbivore,vulnerable,forest,3,1
+dolphin,0,0,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1,Mammal,Herbivore,vulnerable,forest,3,1
+dove,0,1,1,0,1,0,0,0,1,1,0,0,2,1,1,0,2,Bird,Herbivore,vulnerable,forest,0,1
+duck,0,1,1,0,1,1,0,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,3,1
+elephant,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+flamingo,0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,1,2,Bird,Herbivore,vulnerable,forest,0,1
+flea,0,0,1,0,0,0,0,0,0,1,0,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+frog,0,0,1,0,0,1,1,1,1,1,0,0,4,0,0,0,5,Amphibian,Herbivore,vulnerable,forest,3,1
+frog,0,0,1,0,0,1,1,1,1,1,1,0,4,0,0,0,5,Amphibian,Herbivore,vulnerable,forest,3,1
+fruitbat,1,0,0,1,1,0,0,1,1,1,0,0,2,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+giraffe,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+girl,1,0,0,1,0,0,1,1,1,1,0,0,2,0,1,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+gnat,0,0,1,0,1,0,0,0,0,1,0,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+goat,1,0,0,1,0,0,0,1,1,1,0,0,4,1,1,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+gorilla,1,0,0,1,0,0,0,1,1,1,0,0,2,0,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+gull,0,1,1,0,1,1,1,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,3,1
+haddock,0,0,1,0,0,1,0,1,1,0,0,1,0,1,0,0,4,Fish,Herbivore,vulnerable,forest,3,1
+hamster,1,0,0,1,0,0,0,1,1,1,0,0,4,1,1,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+hare,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+hawk,0,1,1,0,1,0,1,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,0,1
+herring,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,4,Fish,Herbivore,vulnerable,forest,3,1
+honeybee,1,0,1,0,1,0,0,0,0,1,1,0,6,0,1,0,6,Bug,Herbivore,vulnerable,forest,0,1
+housefly,1,0,1,0,1,0,0,0,0,1,0,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+kiwi,0,1,1,0,0,0,1,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,0,1
+ladybird,0,0,1,0,1,0,1,0,0,1,0,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+lark,0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,0,1
+leopard,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+lion,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+lobster,0,0,1,0,0,1,1,0,0,0,0,0,6,0,0,0,7,Invertebrate,Herbivore,vulnerable,forest,3,1
+lynx,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+mink,1,0,0,1,0,1,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,3,1
+mole,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+mongoose,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+moth,1,0,1,0,1,0,0,0,0,1,0,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+newt,0,0,1,0,0,1,1,1,1,1,0,0,4,1,0,0,5,Amphibian,Herbivore,vulnerable,forest,3,1
+octopus,0,0,1,0,0,1,1,0,0,0,0,0,8,0,0,1,7,Invertebrate,Herbivore,vulnerable,forest,3,1
+opossum,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+oryx,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+ostrich,0,1,1,0,0,0,0,0,1,1,0,0,2,1,0,1,2,Bird,Herbivore,vulnerable,forest,0,1
+parakeet,0,1,1,0,1,0,0,0,1,1,0,0,2,1,1,0,2,Bird,Herbivore,vulnerable,forest,0,1
+penguin,0,1,1,0,0,1,1,0,1,1,0,0,2,1,0,1,2,Bird,Herbivore,vulnerable,forest,3,1
+pheasant,0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,0,1
+pike,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,1,4,Fish,Herbivore,vulnerable,forest,3,1
+piranha,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,0,4,Fish,Herbivore,vulnerable,forest,3,1
+pitviper,0,0,1,0,0,0,1,1,1,1,1,0,0,1,0,0,3,Reptile,Herbivore,vulnerable,forest,0,1
+platypus,1,0,1,1,0,1,1,0,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,3,1
+polecat,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+pony,1,0,0,1,0,0,0,1,1,1,0,0,4,1,1,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+porpoise,0,0,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1,Mammal,Herbivore,vulnerable,forest,3,1
+puma,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+pussycat,1,0,0,1,0,0,1,1,1,1,0,0,4,1,1,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+raccoon,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+reindeer,1,0,0,1,0,0,0,1,1,1,0,0,4,1,1,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+rhea,0,1,1,0,0,0,1,0,1,1,0,0,2,1,0,1,2,Bird,Herbivore,vulnerable,forest,0,1
+scorpion,0,0,0,0,0,0,1,0,0,1,1,0,8,1,0,0,7,Invertebrate,Herbivore,vulnerable,forest,0,1
+seahorse,0,0,1,0,0,1,0,1,1,0,0,1,0,1,0,0,4,Fish,Herbivore,vulnerable,forest,3,1
+seal,1,0,0,1,0,1,1,1,1,1,0,1,0,0,0,1,1,Mammal,Herbivore,vulnerable,forest,3,1
+sealion,1,0,0,1,0,1,1,1,1,1,0,1,2,1,0,1,1,Mammal,Herbivore,vulnerable,forest,3,1
+seasnake,0,0,0,0,0,1,1,1,1,0,1,0,0,1,0,0,3,Reptile,Herbivore,vulnerable,forest,3,1
+seawasp,0,0,1,0,0,1,1,0,0,0,1,0,0,0,0,0,7,Invertebrate,Herbivore,vulnerable,forest,3,1
+skimmer,0,1,1,0,1,1,1,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,3,1
+skua,0,1,1,0,1,1,1,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,3,1
+slowworm,0,0,1,0,0,0,1,1,1,1,0,0,0,1,0,0,3,Reptile,Herbivore,vulnerable,forest,0,1
+slug,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,7,Invertebrate,Herbivore,vulnerable,forest,0,1
+sole,0,0,1,0,0,1,0,1,1,0,0,1,0,1,0,0,4,Fish,Herbivore,vulnerable,forest,3,1
+sparrow,0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,0,1
+squirrel,1,0,0,1,0,0,0,1,1,1,0,0,2,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+starfish,0,0,1,0,0,1,1,0,0,0,0,0,5,0,0,0,7,Invertebrate,Herbivore,vulnerable,forest,3,1
+stingray,0,0,1,0,0,1,1,1,1,0,1,1,0,1,0,1,4,Fish,Herbivore,vulnerable,forest,3,1
+swan,0,1,1,0,1,1,0,0,1,1,0,0,2,1,0,1,2,Bird,Herbivore,vulnerable,forest,3,1
+termite,0,0,1,0,0,0,0,0,0,1,0,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+toad,0,0,1,0,0,1,0,1,1,1,0,0,4,0,0,0,5,Amphibian,Herbivore,vulnerable,forest,3,1
+tortoise,0,0,1,0,0,0,0,0,1,1,0,0,4,1,0,1,3,Reptile,Herbivore,vulnerable,forest,0,1
+tuatara,0,0,1,0,0,0,1,1,1,1,0,0,4,1,0,0,3,Reptile,Herbivore,vulnerable,forest,0,1
+tuna,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,1,4,Fish,Herbivore,vulnerable,forest,3,1
+vampire,1,0,0,1,1,0,0,1,1,1,0,0,2,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+vole,1,0,0,1,0,0,0,1,1,1,0,0,4,1,0,0,1,Mammal,Herbivore,vulnerable,forest,0,1
+vulture,0,1,1,0,1,0,1,0,1,1,0,0,2,1,0,1,2,Bird,Herbivore,vulnerable,forest,0,1
+wallaby,1,0,0,1,0,0,0,1,1,1,0,0,2,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+wasp,1,0,1,0,1,0,0,0,0,1,1,0,6,0,0,0,6,Bug,Herbivore,vulnerable,forest,0,1
+wolf,1,0,0,1,0,0,1,1,1,1,0,0,4,1,0,1,1,Mammal,Herbivore,vulnerable,forest,0,1
+worm,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,7,Invertebrate,Herbivore,vulnerable,forest,0,1
+wren,0,1,1,0,1,0,0,0,1,1,0,0,2,1,0,0,2,Bird,Herbivore,vulnerable,forest,0,1
