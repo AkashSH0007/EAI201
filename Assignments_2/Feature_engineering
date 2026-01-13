@@ -1,0 +1,409 @@
+import pandas as pd
+from datetime import datetime
+
+results_file = 'results.csv'
+players_file = 'players.csv'
+valuations_file = 'player_valuations.csv'
+appearances_file = 'appearances.csv'
+
+try:
+    print(f"Loading {results_file}...")
+    match_df = pd.read_csv(results_file)
+    print(f"Loading {players_file}...")
+    players_df = pd.read_csv(players_file)
+    print(f"Loading {valuations_file}...")
+    valuations_df = pd.read_csv(valuations_file)
+    print(f"Loading {appearances_file}...")
+    appearances_df = pd.read_csv(appearances_file, usecols=['player_id', 'minutes_played'])
+    print("Files loaded successfully!")
+except FileNotFoundError as e:
+    print(f"\nERROR: {e}. Make sure CSV files are in the same folder.")
+    exit() 
+except Exception as e:
+    print(f"\nAn unexpected error occurred during loading: {e}")
+    exit()
+
+#  Clean Historical Match Data 
+print("\n--- Cleaning Historical Match Data ---")
+try:
+    match_df['date'] = pd.to_datetime(match_df['date'])
+    world_cup_df = match_df[match_df['tournament'] == 'FIFA World Cup'].copy()
+    print(f"SUCCESS: Historical data cleaned! Found {len(world_cup_df)} World Cup matches.")
+except Exception as e:
+    print(f"ERROR cleaning match data: {e}")
+    exit()
+
+# --- Step 2: Clean Player Data & Calculate Age ---
+print("\n--- Cleaning Player Data & Calculating Age ---")
+try:
+    players_df['date_of_birth'] = pd.to_datetime(players_df['date_of_birth'], errors='coerce')
+    reference_date = datetime.now()
+    players_df['age'] = players_df['date_of_birth'].apply(
+        lambda dob: (reference_date - dob).days // 365 if pd.notnull(dob) else None
+    )
+    players_cleaned_df = players_df[[
+        'player_id', 'name', 'country_of_citizenship', 'date_of_birth', 'age', 'position', 'sub_position'
+    ]].copy()
+    players_cleaned_df.dropna(subset=['age'], inplace=True)
+    players_cleaned_df['age'] = players_cleaned_df['age'].astype(int)
+    print("SUCCESS: Player data cleaned and age calculated!")
+except Exception as e:
+    print(f"ERROR cleaning player data: {e}")
+    exit()
+
+# --- Step 3: Get Latest Market Value ---
+print("\n--- Processing Market Valuations ---")
+try:
+    valuations_df['date'] = pd.to_datetime(valuations_df['date'], errors='coerce')
+    valuations_df.dropna(subset=['date', 'market_value_in_eur', 'player_id'], inplace=True)
+    latest_valuations = valuations_df.sort_values(by='date').drop_duplicates(subset=['player_id'], keep='last')
+    latest_valuations = latest_valuations[['player_id', 'market_value_in_eur']]
+    players_cleaned_df = pd.merge(players_cleaned_df, latest_valuations, on='player_id', how='left')
+    print("SUCCESS: Latest market value merged!")
+except Exception as e:
+    print(f"ERROR processing valuations: {e}")
+    exit()
+
+# --- Step 4: Calculate Total Minutes Played (Experience) ---
+print("\n--- Calculating Player Experience (Total Minutes Played) ---")
+try:
+    appearances_df.dropna(subset=['player_id', 'minutes_played'], inplace=True)
+    player_experience = appearances_df.groupby('player_id')['minutes_played'].sum().reset_index()
+    player_experience.rename(columns={'minutes_played': 'total_minutes_played'}, inplace=True)
+    players_cleaned_df = pd.merge(players_cleaned_df, player_experience, on='player_id', how='left')
+    
+    players_cleaned_df['total_minutes_played'] = players_cleaned_df['total_minutes_played'].fillna(0)
+    players_cleaned_df['total_minutes_played'] = players_cleaned_df['total_minutes_played'].astype(int)
+    print("SUCCESS: Player experience calculated and merged!")
+except Exception as e:
+    print(f"ERROR processing appearances: {e}")
+    exit()
+
+# Step 5: Aggregate Player Data to Team Level 
+print("\n--- Aggregating Player Features to Team Level ---")
+try:
+    # Fill missing market values with 0
+    players_cleaned_df['market_value_in_eur'] = players_cleaned_df['market_value_in_eur'].fillna(0)
+
+    # Group by country and calculate aggregate stats
+    team_features = players_cleaned_df.groupby('country_of_citizenship').agg(
+        team_avg_age=('age', 'mean'),
+        team_total_market_value=('market_value_in_eur', 'sum'),
+        team_avg_experience=('total_minutes_played', 'mean') # Using mean minutes as experience metric
+    ).reset_index()
+
+    team_features.rename(columns={'country_of_citizenship': 'team'}, inplace=True)
+    team_features['team_avg_age'] = round(team_features['team_avg_age'], 2)
+    team_features['team_avg_experience'] = round(team_features['team_avg_experience'], 2)
+    print("SUCCESS: Team-level features calculated!")
+    
+except Exception as e:
+    print(f"ERROR aggregating team features: {e}")
+    exit()
+
+# --- Step 6: Merge Team Features into World Cup Data ---
+print("\n--- Merging Team Features into World Cup Match Data ---")
+try:
+    # Merge for home teams
+    world_cup_merged_df = pd.merge(
+        world_cup_df,
+        team_features,
+        left_on='home_team',
+        right_on='team',
+        how='left'
+    )
+    world_cup_merged_df.rename(columns={
+        'team_avg_age': 'home_team_avg_age',
+        'team_total_market_value': 'home_team_total_market_value',
+        'team_avg_experience': 'home_team_avg_experience'
+    }, inplace=True)
+    world_cup_merged_df.drop(columns=['team'], inplace=True)
+
+    # Merge for away teams
+    world_cup_merged_df = pd.merge(
+        world_cup_merged_df,
+        team_features,
+        left_on='away_team',
+        right_on='team',
+        how='left'
+    )
+    world_cup_merged_df.rename(columns={
+        'team_avg_age': 'away_team_avg_age',
+        'team_total_market_value': 'away_team_total_market_value',
+        'team_avg_experience': 'away_team_avg_experience'
+    }, inplace=True)
+    world_cup_merged_df.drop(columns=['team'], inplace=True)
+    print("SUCCESS: Team features merged for home and away teams!")
+
+except Exception as e:
+    print(f"ERROR merging team features into match data: {e}")
+    exit()
+
+# --- Step 7: Handle Missing Team Features using Imputation ---
+print("\n--- Handling Missing Team Features ---")
+try:
+    # Calculate medians for imputation
+    median_home_age = world_cup_merged_df['home_team_avg_age'].median()
+    median_home_value = world_cup_merged_df['home_team_total_market_value'].median()
+    median_home_exp = world_cup_merged_df['home_team_avg_experience'].median()
+    median_away_age = world_cup_merged_df['away_team_avg_age'].median()
+    median_away_value = world_cup_merged_df['away_team_total_market_value'].median()
+    median_away_exp = world_cup_merged_df['away_team_avg_experience'].median()
+
+    # Impute missing values using fillna
+    world_cup_merged_df['home_team_avg_age'].fillna(median_home_age, inplace=True)
+    world_cup_merged_df['home_team_total_market_value'].fillna(median_home_value, inplace=True)
+    world_cup_merged_df['home_team_avg_experience'].fillna(median_home_exp, inplace=True)
+    world_cup_merged_df['away_team_avg_age'].fillna(median_away_age, inplace=True)
+    world_cup_merged_df['away_team_total_market_value'].fillna(median_away_value, inplace=True)
+    world_cup_merged_df['away_team_avg_experience'].fillna(median_away_exp, inplace=True)
+    print("SUCCESS: Missing team features imputed using median values.")
+    
+    # Verify imputation
+    print("\nMissing values after imputation:")
+    print(world_cup_merged_df[['home_team_avg_age', 'home_team_total_market_value', 'home_team_avg_experience',
+                               'away_team_avg_age', 'away_team_total_market_value', 'away_team_avg_experience']].isnull().sum())
+except Exception as e:
+    print(f"ERROR during imputation: {e}")
+    exit()
+
+# --- Step 8: Engineer Goal Difference ---
+print("\n--- Engineering Goal Difference ---")
+try:
+    world_cup_merged_df['goal_difference'] = world_cup_merged_df['home_score'] - world_cup_merged_df['away_score']
+    print("SUCCESS: Goal difference feature created.")
+    
+except Exception as e:
+    print(f"ERROR creating goal difference: {e}")
+    exit()
+
+# --- Display Final Preview and Save ---
+print("\n--- Final Data Preview (End of Current Steps) ---")
+print(world_cup_merged_df.head())
+print("\nFinal data info:")
+world_cup_merged_df.info()
+
+# Save the current state to a CSV
+output_filename = 'world_cup_matches_with_features_partial.csv'
+try:
+    world_cup_merged_df.to_csv(output_filename, index=False)
+    print(f"\nSUCCESS: Partially processed data saved to {output_filename}")
+except Exception as e:
+    print(f"\nERROR saving final CSV: {e}")
+
+print("\n--- Loading and Merging FIFA Rankings ---")
+
+ranking_file = 'fifa_mens_rank.csv' 
+
+try:
+    print(f"Loading {ranking_file}...")
+    rankings_df = pd.read_csv(ranking_file)
+    print(f"SUCCESS: Loaded {ranking_file}. Columns: {list(rankings_df.columns)}")
+
+    
+    rank_col = 'rank'
+    team_col = 'team'
+    date_col = 'date' 
+    points_col = 'total.points'
+
+    
+    required_cols = [rank_col, team_col, date_col, points_col]
+    if not all(col in rankings_df.columns for col in required_cols):
+        missing = [col for col in required_cols if col not in rankings_df.columns]
+        raise KeyError(f"Missing expected columns in ranking file: {missing}. Found: {list(rankings_df.columns)}")
+
+    # Keep only needed columns and rename
+    rankings_df = rankings_df[required_cols].copy()
+    rankings_df.rename(columns={
+        team_col: 'ranking_team_name',
+        date_col: 'rank_year',
+        rank_col: 'rank',
+        points_col: 'total_points' 
+        }, inplace=True)
+
+    
+    print(f"Converting numeric 'rank_year' (assuming YYYY) to YYYY-01-01 datetime...")
+    rankings_df['rank_date'] = pd.to_datetime(rankings_df['rank_year'].astype(str) + '-01-01', errors='coerce')
+
+    rankings_df.dropna(subset=['rank_date', 'rank'], inplace=True) 
+    rankings_df['rank'] = rankings_df['rank'].astype(int)
+
+    # Sort data for efficient merging
+    world_cup_merged_df = world_cup_merged_df.sort_values(by='date')
+    rankings_df = rankings_df.sort_values(by='rank_date')
+
+    print("Attempting to merge rankings using merge_asof...")
+    
+    world_cup_merged_df = pd.merge_asof(
+        world_cup_merged_df,
+        rankings_df[['rank_date', 'ranking_team_name', 'rank', 'total_points']],
+        left_on='date',          
+        right_on='rank_date',    
+        left_by='home_team',      
+        right_by='ranking_team_name', 
+        direction='backward'      
+    )
+    # Rename merged columns for home team
+    world_cup_merged_df.rename(columns={'rank': 'home_team_rank', 'total_points': 'home_team_rank_points'}, inplace=True)
+    world_cup_merged_df.drop(columns=['rank_date', 'ranking_team_name'], inplace=True, errors='ignore') # Drop helper columns
+
+    
+    world_cup_merged_df = pd.merge_asof(
+        world_cup_merged_df,
+        rankings_df[['rank_date', 'ranking_team_name', 'rank', 'total_points']],
+        left_on='date',
+        right_on='rank_date',
+        left_by='away_team',
+        right_by='ranking_team_name',
+        direction='backward'
+    )
+    # Rename merged columns for away team
+    world_cup_merged_df.rename(columns={'rank': 'away_team_rank', 'total_points': 'away_team_rank_points'}, inplace=True)
+    world_cup_merged_df.drop(columns=['rank_date', 'ranking_team_name'], inplace=True, errors='ignore')
+
+    print("SUCCESS: FIFA rankings merge attempted.")
+
+    # Check for matches where ranking couldn't be found
+    missing_home_rank = world_cup_merged_df['home_team_rank'].isnull().sum()
+    missing_away_rank = world_cup_merged_df['away_team_rank'].isnull().sum()
+    print(f"\nMatches with missing home team rank after merge: {missing_home_rank} / {len(world_cup_merged_df)}")
+    print(f"Matches with missing away team rank after merge: {missing_away_rank} / {len(world_cup_merged_df)}")
+
+    # Handle missing ranks (e.g., fill with median of available ranks)
+    
+    median_rank = world_cup_merged_df['home_team_rank'].median() # Calculate median from successfully merged ranks
+    median_points = world_cup_merged_df['home_team_rank_points'].median() # Calculate median points similarly
+
+    world_cup_merged_df['home_team_rank'].fillna(median_rank, inplace=True)
+    world_cup_merged_df['away_team_rank'].fillna(median_rank, inplace=True) # Use same median for away team
+    world_cup_merged_df['home_team_rank_points'].fillna(median_points, inplace=True)
+    world_cup_merged_df['away_team_rank_points'].fillna(median_points, inplace=True) # Use same median points
+    print("Missing ranks imputed.")
+
+    # --- Verify Imputation for Ranks ---
+    print("\nMissing values after rank imputation:")
+    print(world_cup_merged_df[['home_team_rank', 'home_team_rank_points',
+                               'away_team_rank', 'away_team_rank_points']].isnull().sum())
+
+
+except FileNotFoundError:
+    print(f"\nERROR: Could not find ranking file: {ranking_file}")
+    print("Skipping ranking merge step. Proceeding without ranking features.")
+except KeyError as e:
+     print(f"\nERROR: A column name in {ranking_file} might be wrong. Details: {e}")
+     # Try printing the actual columns found if rankings_df was loaded
+     try:
+        print(f"Actual columns found in {ranking_file}: {list(rankings_df.columns)}")
+     except NameError:
+        pass
+     print("Please check the CSV column names and update the script (rank_col, team_col, date_col, points_col).")
+     print("Skipping ranking merge step. Proceeding without ranking features.")
+except Exception as e:
+    print(f"\nAn unexpected error occurred during ranking merge: {e}")
+    print("Skipping ranking merge step. Proceeding without ranking features.")
+
+
+# --- Display Final Preview and Save (Overwrite) ---
+print("\n--- Final Data Preview (After Ranking Merge) ---")
+print(world_cup_merged_df.head())
+print("\nFinal data info:")
+world_cup_merged_df.info()
+
+# Save the updated state to a CSV
+output_filename = 'world_cup_matches_with_features_ranking.csv' # New name for this version
+try:
+    world_cup_merged_df.to_csv(output_filename, index=False)
+    print(f"\nSUCCESS: Partially processed data (including rankings) saved to {output_filename}")
+except Exception as e:
+    print(f"\nERROR saving final CSV: {e}")
+
+
+# --- Step 10: Calculate Historical Win Rate ---
+print("\n--- Calculating Historical Win Rate ---")
+
+# Ensure DataFrame is sorted by date for correct historical calculation
+world_cup_merged_df = world_cup_merged_df.sort_values(by='date')
+
+# Dictionary to cache results for efficiency
+win_rate_cache = {}
+
+def calculate_win_rate(team, date, df):
+    """Calculates the win rate for a team in WC matches before a given date."""
+    cache_key = (team, date)
+    if cache_key in win_rate_cache:
+        return win_rate_cache[cache_key]
+
+    # Filter matches *before* the given date where the team played
+    past_matches = df[(df['date'] < date) & ((df['home_team'] == team) | (df['away_team'] == team))]
+
+    if past_matches.empty:
+        
+        win_rate_cache[cache_key] = 0.0
+        return 0.0
+
+    wins = 0
+    # Check home wins
+    wins += len(past_matches[(past_matches['home_team'] == team) & (past_matches['home_score'] > past_matches['away_score'])])
+    # Check away wins
+    wins += len(past_matches[(past_matches['away_team'] == team) & (past_matches['away_score'] > past_matches['home_score'])])
+
+    total_matches = len(past_matches)
+    win_rate = wins / total_matches if total_matches > 0 else 0.0
+
+    win_rate_cache[cache_key] = win_rate
+    return win_rate
+
+# Apply the function to calculate win rates - This might take a minute or two
+print("Calculating win rates (this may take some time)...")
+world_cup_merged_df['home_team_win_rate'] = world_cup_merged_df.apply(
+    lambda row: calculate_win_rate(row['home_team'], row['date'], world_cup_merged_df),
+    axis=1
+)
+world_cup_merged_df['away_team_win_rate'] = world_cup_merged_df.apply(
+    lambda row: calculate_win_rate(row['away_team'], row['date'], world_cup_merged_df),
+    axis=1
+)
+print("SUCCESS: Historical win rates calculated.")
+
+# --- Final Data Preview and Save (Overwrite) ---
+print("\n--- Final Data Preview (After Win Rate Calculation) ---")
+print(world_cup_merged_df[['date', 'home_team', 'away_team', 'home_team_win_rate', 'away_team_win_rate']].head())
+print("\nFinal data info:")
+world_cup_merged_df.info()
+
+# Save the final DataFrame
+output_filename = 'world_cup_final_dataset.csv' # FINAL FILENAME
+try:
+    world_cup_merged_df.to_csv(output_filename, index=False)
+    print(f"\nSUCCESS: FINAL processed data saved to {output_filename}")
+    print("\n--- Data Preparation and Feature Engineering Complete! ---")
+except Exception as e:
+    print(f"\nERROR saving final CSV: {e}")
+
+
+
+print("\n--- Creating Target Variable (Match Outcome) ---")
+
+# Define match outcome: 1 = home win, 0 = draw, 2 = away win
+def get_outcome(row):
+    if row['home_score'] > row['away_score']:
+        return 1 # Home win
+    elif row['home_score'] < row['away_score']:
+        return 2 # Away win
+    else:
+        return 0 # Draw
+
+world_cup_merged_df['match_outcome'] = world_cup_merged_df.apply(get_outcome, axis=1)
+
+print("SUCCESS: 'match_outcome' column created (1=HomeWin, 0=Draw, 2=AwayWin).")
+print(world_cup_merged_df[['date', 'home_team', 'away_team', 'home_score', 'away_score', 'match_outcome']].head())
+
+# --- Update Final Save ---
+
+output_filename = 'world_cup_final_dataset.csv' 
+try:
+    world_cup_merged_df.to_csv(output_filename, index=False)
+    print(f"\nSUCCESS: FINAL processed data (including outcome) saved to {output_filename}")
+    print("\n--- Data Preparation and Feature Engineering Complete! ---")
+except Exception as e:
+    print(f"\nERROR saving final CSV: {e}")
